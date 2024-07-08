@@ -4,6 +4,8 @@ import HandIcon from './HandIcon';
 import { compareHand, generateRandomHand } from './utils';
 import {useState} from "react";
 
+const INITIAL_VALUE = 'rock';
+
 function getResult(me, other) {
   const comparison = compareHand(me, other);
   if (comparison > 0) return '승리';
@@ -12,8 +14,8 @@ function getResult(me, other) {
 }
 
 function App() {
-  const [hand, setHand] = useState('rock')
-  const [otherHand, setOtherHand] = useState('rock')
+  const [hand, setHand] = useState(INITIAL_VALUE)
+  const [otherHand, setOtherHand] = useState(INITIAL_VALUE)
 
   const handleButtonClick = (nextHand) => {
       // const nextOtherHand = generateRandomHand();
@@ -24,8 +26,8 @@ function App() {
   };
 
   const handleClearClick = () => {
-      setHand('rock')
-      setOtherHand('rock')
+      setHand(INITIAL_VALUE)
+      setOtherHand(INITIAL_VALUE)
   };
 
   return (
