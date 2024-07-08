@@ -16,6 +16,8 @@ function App() {
   const [otherHand, setOtherHand] = useState('rock')
 
   const handleButtonClick = (nextHand) => {
+      // const nextOtherHand = generateRandomHand();
+      // setOtherHand(nextOtherHand);
       setHand(nextHand);
       setOtherHand(generateRandomHand());
 
