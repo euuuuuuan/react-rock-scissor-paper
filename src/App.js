@@ -1,8 +1,8 @@
+import {useState} from 'react';
 import Button from './Button';
 import HandButton from './HandButton';
 import HandIcon from './HandIcon';
 import {compareHand, generateRandomHand} from './utils';
-import {useState} from "react";
 
 const INITIAL_VALUE = 'rock';
 
@@ -17,29 +17,50 @@ function App() {
     const [hand, setHand] = useState(INITIAL_VALUE)
     const [otherHand, setOtherHand] = useState(INITIAL_VALUE)
     const [gameHistory, setGameHistory] = useState([]);
+    const [score, setScore] = useState(0);
+    const [otherScore, setOtherScore] = useState(0);
+    const [bet, setBet] = useState(1);
 
     const handleButtonClick = (nextHand) => {
         const nextOtherHand = generateRandomHand();
-        setOtherHand(nextOtherHand);
-        const nextHistoryItem = getResult(nextHand, nextOtherHand)
+        const nextHistoryItem = getResult(nextHand, nextOtherHand);
+        const comparison = compareHand(nextHand, nextOtherHand);
         setHand(nextHand);
-        // setOtherHand(generateRandomHand());
+        setOtherHand(nextOtherHand);
         setGameHistory([...gameHistory, nextHistoryItem]);
+        if (comparison > 0) setScore(score + bet);
+        if (comparison < 0) setOtherScore(otherScore + bet);
     };
     const handleClearClick = () => {
         setHand(INITIAL_VALUE)
         setOtherHand(INITIAL_VALUE)
         setGameHistory([]);
+        setScore(0);
+        setOtherScore(0);
+        setBet(1);
+    };
+
+    const handleBetChange = (e) => {
+        let num = Number(e.target.value);  // <input> 요소에 입력된 값을 문자열로 가져옴
+        if (num > 9) num %= 10;  // num을 10으로 나눈 나머지, 즉 1과 9 사이의 숫자로 만들어 줌
+        if (num < 1) num = 1;
+        num = Math.floor(num);  // num이 소수일 경우를 대비한 Math.floor: ex: num이 2.5면 2가 된다.
+        setBet(num);
     };
 
     return (
         <div>
             <Button onClick={handleClearClick}>처음부터</Button>
-            <p>{getResult(hand, otherHand)}</p>
+            <div>
+                {score} : {otherScore}
+            </div>
             <div>
                 <HandIcon value={hand}/>
                 VS
                 <HandIcon value={otherHand}/>
+            </div>
+            <div>
+                <input type="number" value={bet} min={1} max={9} onChange={handleBetChange}></input>
             </div>
             <p>승부 기록: {gameHistory.join(', ')}</p>
             <div>
